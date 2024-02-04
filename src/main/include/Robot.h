@@ -13,8 +13,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <string>
 #include "RobotMap.h"
-#include "Shooter.h"
-#include "ShooterBehaviour.h"
+// #include "Shooter.h"
+// #include "ShooterBehaviour.h"
 #include "Wombat.h"
 #include "RobotMap.h"
 class Robot : public frc::TimedRobot {
@@ -33,7 +33,6 @@ class Robot : public frc::TimedRobot {
   RobotMap robotmap;
   wom::BehaviourScheduler* sched;
   frc::EventLoop loop;
-  Shooter *shooter;
 
   frc::SendableChooser<std::string> m_chooser;
 
@@ -43,7 +42,8 @@ class Robot : public frc::TimedRobot {
 
   frc::SendableChooser<std::string> m_path_chooser;
 
-  wom::SwerveDrive* _swerveDrive;
+
+
 
   // ctre::phoenix6::hardware::TalonFX *frontLeft;
   // ctre::phoenix6::hardware::TalonFX *frontRight;
