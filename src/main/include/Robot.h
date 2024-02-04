@@ -11,7 +11,13 @@
 #include <frc/smartdashboard/Field2d.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <networktables/DoubleTopic.h>
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableInstance.h>
+
 #include <string>
+
+#include "Behaviours/ClimberBehaviour.h"
 #include "RobotMap.h"
 // #include "Shooter.h"
 // #include "ShooterBehaviour.h"
@@ -42,11 +48,6 @@ class Robot : public frc::TimedRobot {
 
   frc::SendableChooser<std::string> m_path_chooser;
 
-
-
-
-  // ctre::phoenix6::hardware::TalonFX *frontLeft;
-  // ctre::phoenix6::hardware::TalonFX *frontRight;
-  // ctre::phoenix6::hardware::TalonFX *backLeft;
-  // ctre::phoenix6::hardware::TalonFX *backRight;
+  wom::SwerveDrive* _swerveDrive;
+  Climber* climber;
 };
