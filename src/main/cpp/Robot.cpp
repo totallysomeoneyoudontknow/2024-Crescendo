@@ -20,9 +20,9 @@ static units::second_t lastPeriodic;
 
 
 void Robot::RobotInit() {
-  distSensor = new rev::Rev2mDistanceSensor(rev::Rev2mDistanceSensor::Port::kOnboard,
-                rev::Rev2mDistanceSensor::DistanceUnit::kMilliMeters,
-                rev::Rev2mDistanceSensor::RangeProfile::kDefault);
+  // distSensor = new rev::Rev2mDistanceSensor(rev::Rev2mDistanceSensor::Port::kOnboard,
+  //               rev::Rev2mDistanceSensor::DistanceUnit::kMilliMeters,
+  //               rev::Rev2mDistanceSensor::RangeProfile::kDefault);
 }
 
 
