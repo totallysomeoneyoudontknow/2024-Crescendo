@@ -28,27 +28,29 @@ struct RobotMap {
   Controllers controllers;
 
   struct Shooter {
-    rev::CANSparkMax shooterMotor{11, rev::CANSparkMax::MotorType::kBrushless};// Port 11
+    rev::CANSparkMax shooterMotor{31, rev::CANSparkMax::MotorType::kBrushless};// Port 11
     // frc::DigitalInput shooterSensor{2};
 
     // wom::VoltageController shooterMotorGroup = wom::VoltagedController::Group(shooterMotor);
     wom::CANSparkMaxEncoder* shooterEncoder = new wom::CANSparkMaxEncoder(&shooterMotor, 0.01_m);
     wom::Gearbox shooterGearbox{&shooterMotor, shooterEncoder, frc::DCMotor::NEO(1)};
 
-    wom::utils::PIDConfig<units::radians_per_second, units::volts> pidConfigS{
-          "/armavator/arm/velocityPID/config",
-          0.1_V / (360_deg / 1_s),
-          0.03_V / 25_deg,
-          0.001_V / (90_deg / 1_s / 1_s),
-          5_rad_per_s,
-          10_rad_per_s / 1_s
-    };
+    // frc::utils::PIDConfig<units::radians_per_second, units::volts> pidConfigS{
+    //       "/armavator/arm/velocityPID/config",
+          
+    //       0.9_V / (360_deg / 1_s),
+    //       0_V / 25_deg,
+    //       0_V / (90_deg / 1_s / 1_s),
+    //       5_rad_per_s,
+    //       10_rad_per_s / 1_s
+    // };
 
     ShooterConfig config{
         "shooterGearbox",
-        shooterGearbox,
-        pidConfigS
+        shooterGearbox
+        // &shooterSensor
     };
+
 
     
 
