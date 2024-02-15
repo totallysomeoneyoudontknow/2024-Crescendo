@@ -5,7 +5,7 @@
 #include "ShooterBehaviour.h"
 
 ShooterManualControl::ShooterManualControl(Shooter* shooter, frc::XboxController* tester)
-    : _shooter(shooter), _tester(tester) {
+    : _shooter(shooter), _codriver(tester) {
   Controls(shooter);
 }
 
@@ -13,7 +13,7 @@ void ShooterManualControl::OnTick(units::second_t dt) {
   table->GetEntry("RawControl").SetBoolean(_rawControl);
 
 
-  if (_tester->GetAButtonPressed()) {
+  if (_codriver->GetAButtonPressed()) {
     if (_rawControl == true) {
       _rawControl = false;
     } else {
@@ -24,23 +24,27 @@ void ShooterManualControl::OnTick(units::second_t dt) {
     if (_rawControl) {
       _shooter->SetState(ShooterState::kRaw);
       
-      if (_tester->GetLeftTriggerAxis() > 0.1) {
-        _shooter->SetRaw(12_V * _tester->GetLeftTriggerAxis());
-      } else if (_tester->GetRightTriggerAxis() > 0.1) {
-        _shooter->SetRaw(-12_V * _tester->GetRightTriggerAxis());
+      if (_codriver->GetLeftTriggerAxis() > 0.1) {
+        _shooter->SetRaw(12_V * _codriver->GetLeftTriggerAxis());
+      } else if (_codriver->GetRightTriggerAxis() > 0.1) {
+        _shooter->SetRaw(-12_V * _codriver->GetRightTriggerAxis());
       } else {
 
         _shooter->SetRaw(0_V);
       }
     } else {
-      if (_tester->GetXButton()) {
-        _shooter->SetPidGoal(150_rad_per_s);
+      if (_codriver->GetPOV() == 0) { 
+        _shooter->SetPidGoal(-100_rad_per_s);
         _shooter->SetState(ShooterState::kSpinUp);
-      } else if (_tester->GetYButton()) {
-        _shooter->SetPidGoal(300_rad_per_s);
+      } else if (_codriver->GetPOV() == 90) { // this will work with vision 
+        // _shooter->SetPidGoal(300_rad_per_s);
+        // _shooter->SetState(ShooterState::kSpinUp);
+      } else if(_codriver->GetPOV() == 180){
+        _shooter->SetPidGoal(-400_rad_per_s);
         _shooter->SetState(ShooterState::kSpinUp);
       } else {
         _shooter->SetState(ShooterState::kIdle);
       }
-    }
-}
+    } 
+} 
+

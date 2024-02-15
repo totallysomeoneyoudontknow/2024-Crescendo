@@ -18,7 +18,7 @@ class ShooterManualControl : public behaviour::Behaviour {
 
  private:
   Shooter* _shooter;
-  frc::XboxController* _tester;
+  frc::XboxController* _codriver;
 
   bool _rawControl = true;
   std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("Shooter Behaviour");

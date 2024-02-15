@@ -5,7 +5,7 @@
 #include "Shooter.h"
 
 
-Shooter::Shooter(ShooterConfig config) : _config(config), _pid(frc::PIDController (3, 0, 0, 0.05_s)) {} 
+Shooter::Shooter(ShooterConfig config) : _config(config), _pid(frc::PIDController (2, 0, 0, 0.05_s)) {} 
 
 void Shooter::OnStart() {
   _pid.Reset();
@@ -36,7 +36,7 @@ void Shooter::OnUpdate(units::second_t dt) {
       _statename = "SpinUp";
       std::cout << "KSpinUp" << std::endl;
       _pid.SetSetpoint(_goal.value());
-      units::volt_t pidCalculate = units::volt_t {_pid.Calculate(_config.ShooterGearbox.encoder->GetEncoderAngularVelocity().value())};
+      units::volt_t pidCalculate = units::volt_t {_pid.Calculate(-_config.ShooterGearbox.encoder->GetEncoderAngularVelocity().value())};
       std::cout << "KShooting" << std::endl;
 
       if (_pid.GetPositionError() < 0.017) {

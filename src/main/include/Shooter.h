@@ -19,7 +19,7 @@ struct ShooterConfig {
   // frc::DigitalInput* shooterSensor;
 };
 
-enum class ShooterState { kIdle, kShooting, kSpinUp, kReverse, kRaw };
+enum class ShooterState {kIdle, kShooting, kSpinUp, kReverse, kRaw};
 
 class Shooter : public behaviour::HasBehaviour {
  public:
