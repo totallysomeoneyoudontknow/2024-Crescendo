@@ -5,7 +5,7 @@
 #include "Shooter.h"
 
 
-Shooter::Shooter(ShooterConfig config) : _config(config), _pid(frc::PIDController (2, 0, 0, 0.05_s)) {} 
+Shooter::Shooter(ShooterConfig config) : _config(config), _pid(frc::PIDController (0.028, 0.27, 0, 0.05_s)) {} 
 
 void Shooter::OnStart() {
   _pid.Reset();
@@ -15,65 +15,48 @@ void Shooter::OnStart() {
 void Shooter::OnUpdate(units::second_t dt) {
   // _pid.SetTolerance(0.5, 4);
   table->GetEntry("Error").SetDouble(_pid.GetPositionError());
-  // table->GetEntry("Acceleration Error").SetDouble(_pid.GetVelocityError());
+  table->GetEntry("Acceleration Error").SetDouble(_pid.GetVelocityError());
   table->GetEntry("SetPoint").SetDouble(_pid.GetSetpoint());
   // table->GetEntry("Current Pos").SetDouble(_config.ShooterGearbox.encoder->GetEncoderAngularVelocity().value());
   // table->GetEntry("EncoderValue").SetDouble(_config.ShooterGearbox.encoder->GetVelocityValue());
-  table->GetEntry("Shooting").SetString(_statename);
+  table->GetEntry("Shooter State").SetString(_statename);
+  // frc::ShuffleboardTab& tab = frc::Shuffleboard::GetTab("Shooter");
+  frc::SmartDashboard::PutData("Shooter PID Controller", &_pid);
+  // nt::GenericEntry& shooterEnable = *tab.Add("Shooter Enable", false).GetEntry();
+
+
   switch (_state) {
     case ShooterState::kIdle: {
       _statename = "Idle";
       _pid.Reset();
-      holdVoltage = 0_V;
-      std::cout << "KIdle" << std::endl;
       _setVoltage = 0_V;
-      // if (_shooterSensor.Get()) {
-      //   _state = ShooterState::kReverse;
-      // }
-      
     } break;
+
     case ShooterState::kSpinUp: {
       _statename = "SpinUp";
-      std::cout << "KSpinUp" << std::endl;
+
       _pid.SetSetpoint(_goal.value());
-      units::volt_t pidCalculate = units::volt_t {_pid.Calculate(-_config.ShooterGearbox.encoder->GetEncoderAngularVelocity().value())};
-      std::cout << "KShooting" << std::endl;
-
-      if (_pid.GetPositionError() < 0.017) {
-        holdVoltage = pidCalculate;
-        std::cout << "STABLE" << std::endl;
-        _state = ShooterState::kShooting;
-      }
-
-//     bool SwerveDrive::IsAtSetPose() {
-//   return std::abs(PIDController.GetPositionError()) < 0.017 &&
-//          std::abs(PIDController.GetVelocityError()) < 0.017 &&
-// }
-
-      if (holdVoltage.value() == 0) {
-        _setVoltage = pidCalculate;
-      } else {
-        _setVoltage = holdVoltage;
-      }
+      units::volt_t pidCalculate = units::volt_t {_pid.Calculate(_config.ShooterGearbox.encoder->GetEncoderAngularVelocity().value())};
+      _setVoltage = pidCalculate;
 
     } break;
     case ShooterState::kShooting: {
-      _statename = "Shooting";
+      // _statename = "Shooting";
       
-      _pid.SetSetpoint(_goal.value());
-      units::volt_t pidCalculate = units::volt_t {_pid.Calculate(_config.ShooterGearbox.encoder->GetEncoderAngularVelocity().value())};
-      std::cout << "KShooting" << std::endl;
+      // _pid.SetSetpoint(100);
+      // units::volt_t pidCalculate = units::volt_t {_pid.Calculate(_config.ShooterGearbox.encoder->GetEncoderAngularVelocity().value())};
 
-      if (_pid.GetPositionError() < 0.017) {
-        holdVoltage = pidCalculate;
-        std::cout << "STABLE" << std::endl;
-      }
+      // if (_pid.GetPositionError() > 0.017) {
+      //   // holdVoltage = pidCalculate;
+      //   _state = ShooterState::kSpinUp;
+      //   std::cout << "STABLE" << std::endl;
+      // }
 
-      if (holdVoltage.value() == 0) {
-        _setVoltage = pidCalculate;
-      } else {
-        _setVoltage = holdVoltage;
-      }
+      // if (holdVoltage.value() == 0) {
+        // _setVoltage = pidCalculate;
+      // } else {
+      //   _setVoltage = holdVoltage;
+      // }
       
     } break;
 

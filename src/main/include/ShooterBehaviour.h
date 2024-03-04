@@ -24,3 +24,14 @@ class ShooterManualControl : public behaviour::Behaviour {
   std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("Shooter Behaviour");
   
 };
+
+class AutoShooter : public behaviour::Behaviour {
+  public: 
+   AutoShooter(Shooter* shooter, units::radians_per_second_t speed);
+
+   void OnTick(units::second_t dt) override;
+
+  private:
+   Shooter* _shooter;
+   units::radians_per_second_t _speed;
+};

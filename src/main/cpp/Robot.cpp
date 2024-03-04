@@ -110,5 +110,10 @@ void Robot::TeleopPeriodic() {
 void Robot::DisabledInit() {}
 void Robot::DisabledPeriodic() {}
 
-void Robot::TestInit() {}
+void Robot::TestInit() {
+  loop.Clear();
+  wom::BehaviourScheduler *sched = wom::BehaviourScheduler::GetInstance();
+  shooter->OnStart();
+  sched->InterruptAll();
+}
 void Robot::TestPeriodic() {}
